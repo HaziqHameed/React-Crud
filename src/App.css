@@ -1,0 +1,12 @@
+.App {
+  text-align: center;
+}
+
+.header-fonts{
+  color: black;
+  text-transform: uppercase;
+}
+
+.from-margin{
+  margin: 5rem;
+}
