@@ -3,43 +3,31 @@ import { Alert, Button, Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../App.css";
+import { addEmployee } from "../Services/Responses";
 
+/**
+ * React component for creating a new employee.
+ */
 function Create() {
+  // State variables for form inputs and error handling
   const [name, setName] = useState("");
   const [salary, setSalary] = useState("");
   const [position, setPosition] = useState("");
   const [error, setError] = useState(null);
-  let history = useNavigate();
-  const addEmployee = async (name, salary, position) => {
-    await fetch("http://127.0.0.1:8000/api/employees/store", {
-      method: "POST",
-      body: JSON.stringify({
-        name: name,
-        salary: salary,
-        position: position,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then(async (response) => {
-        if (response.status === 200) {
-          history("/");
-        } else {
-          const errorData = await response.json();
-          console.log("Error:", errorData.errors);
-          setError(errorData.errors || "An error occurred");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+
+  // Hook to navigate between pages
+  let navigate = useNavigate();
+
+  /**
+   * Handles form submission.
+   * @param {Event} e - The form submit event.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
-    addEmployee(name, salary, position);
+    addEmployee(name, salary, position, navigate, setError);
   };
+
+  // JSX code for the component
   return (
     <div>
       <Form className="d-grip gap-2 form-margin">

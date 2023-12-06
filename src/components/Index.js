@@ -1,49 +1,30 @@
 import { useState, useEffect } from "react";
 import { Button, Table } from "react-bootstrap";
-import array from "./array";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { delEmployee, getEmployees } from "../Services/Responses";
 
+/**
+ * React component for displaying a table of employees.
+ */
 function Index() {
-  let history = useNavigate();
-
+  // State to hold the list of employees
   const [employees, setEmployees] = useState([]);
-  const getEmp = () => {
-    fetch("http://127.0.0.1:8000/api/employees")
-      .then((response) => response.json())
-      .then((data) => setEmployees(data))
-      .catch((error) => console.error("Error fetching Employees:", error));
-  };
+
+  // Fetch employees data from the server when the component mounts
   useEffect(() => {
-    getEmp();
+    getEmployees(setEmployees);
   }, []);
-  const deleteEmployee = async (id) => {
-    console.log(id, "delete id");
-    await fetch("http://127.0.0.1:8000/api/employees/destroy/" + id, {
-      method: "DELETE",
-    }).then((response) => {
-      if (response.status === 200) {
-        getEmp();
-        console.log(response, "del response");
-      } else {
-        return;
-      }
-    });
+
+  /**
+   * Handles the deletion of an employee.
+   * @param {number} id - The ID of the employee to be deleted.
+   */
+  const deleteEmployee = (id) => {
+    delEmployee(id, setEmployees);
   };
 
-  console.log(employees, "fetch employees api");
-  console.log(employees?.data, "filtered");
-  // function deleted(id) {
-  //     let index = array.map(function(e) {
-  //         return e.id;
-  //     }).indexOf(id);
-  //     console.log(index, "from Index Page");
-  //     array.splice(index,1);
-  // }
-
-  // const navigateToEdit=()=>{
-
-  // }
+  // JSX code for rendering the component
   return (
     <div className="form-margin">
       <Table striped bordered hover size="sm">

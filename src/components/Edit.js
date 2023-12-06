@@ -3,69 +3,52 @@ import { Button, Form } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../App.css";
+import { getEmployee, updateEmployee } from "../Services/Responses";
 
+/**
+ * Edit component for updating employee information.
+ */
 const Edit = () => {
-  let history = useNavigate();
+  // Hook to navigate between pages
+  let navigate = useNavigate();
 
+  // Hook to extract parameters from the URL
   const params = useParams();
+
+  // State to hold employee data
   const [employee, setEmployee] = useState("");
+
+  // States to hold form input values
   const [name, setName] = useState(employee?.data?.name);
   const [salary, setSalary] = useState("");
   const [position, setPosition] = useState("");
   const [id, setId] = useState(params.id);
   const [error, setError] = useState(null);
 
-  const getEmp = (id) => {
-    fetch("http://127.0.0.1:8000/api/employees/show/" + id)
-      .then((response) => response.json())
-      .then((data) => setEmployee(data))
-      .catch((error) => console.error("Error fetching Employees:", error));
-  };
-  const updateEmployee = async (name, salary, position) => {
-    await fetch("http://127.0.0.1:8000/api/employees/edit/" + id, {
-      method: "POST",
-      body: JSON.stringify({
-        name: name,
-        salary: salary,
-        position: position,
-      }),
-      headers: {
-        "Content-type": "application/json",
-        "Accept": "application/json",
-      },
-    })
-      .then(async (response) => {
-        if (response.status === 200) {
-          history("/");
-        } else {
-          const errorData = await response.json();
-          console.log("Error:", errorData.errors);
-          setError(errorData.errors || "An error occurred");
-        }
-      })
-      .catch((error) => {
-        console.error(error, "error");
-      });
-  };
+  /**
+   * Handles form submission to update employee information.
+   * @param {Object} e - Event object.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateEmployee(name, salary, position);
+    updateEmployee(id, name, salary, position, navigate, setError);
   };
 
+  // Effect to fetch employee data when the component mounts
   useEffect(() => {
-    console.log("render id useEffect");
-    getEmp(id);
+    getEmployee(id, setEmployee);
   }, [id]);
-  useEffect(() => {
-    console.log("render employe useEffect");
 
+  // Effect to update form input values when employee data changes
+  useEffect(() => {
     if (employee?.data) {
-      debugger;
       setName(employee?.data?.name);
       setSalary(employee?.data?.salary);
       setPosition(employee?.data?.position);
     }
   }, [employee]);
+
+  // JSX code for rendering the component
   return (
     <div>
       <Form className="d-grip gap-2 form-margin">
