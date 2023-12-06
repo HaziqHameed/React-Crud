@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Create from "./components/Create";
 import Edit from "./components/Edit";
@@ -16,9 +12,9 @@ function App() {
       <h3 className="header-fonts">crud application</h3>
       <Router>
         <Routes>
-        <Route path="/" element={<Index/>}></Route>
-        <Route path="/create" element={<Create/>}></Route>
-        <Route path="/edit/:id" element={<Edit/>}></Route>
+          <Route path="/" element={<Index />}></Route>
+          <Route path="/create" element={<Create />}></Route>
+          <Route path="/edit/:id" element={<Edit />}></Route>
         </Routes>
       </Router>
     </div>
